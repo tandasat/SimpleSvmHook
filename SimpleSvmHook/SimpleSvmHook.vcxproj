@@ -1,0 +1,116 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{D8F3DC11-65E5-42C4-84A5-B23FC17F6A3C}</ProjectGuid>
+    <TemplateGuid>{dd38f7fc-d7bd-488b-9242-7d8754cde80d}</TemplateGuid>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <MinimumVisualStudioVersion>12.0</MinimumVisualStudioVersion>
+    <Configuration>Debug</Configuration>
+    <Platform Condition="'$(Platform)' == ''">Win32</Platform>
+    <RootNamespace>SimpleSvmHook</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <TargetVersion>Windows7</TargetVersion>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>WindowsKernelModeDriver10.0</PlatformToolset>
+    <ConfigurationType>Driver</ConfigurationType>
+    <DriverType>WDM</DriverType>
+    <DriverTargetPlatform>Desktop</DriverTargetPlatform>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <TargetVersion>Windows7</TargetVersion>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>WindowsKernelModeDriver10.0</PlatformToolset>
+    <ConfigurationType>Driver</ConfigurationType>
+    <DriverType>WDM</DriverType>
+    <DriverTargetPlatform>Desktop</DriverTargetPlatform>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <PropertyGroup>
+    <DebuggerFlavor>DbgengKernelDebugger</DebuggerFlavor>
+    <CodeAnalysisRuleSet>SimpleSvmHook.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PreprocessorDefinitions>POOL_NX_OPTIN=1;SIMPLESVMHOOK_SINGLE_HOOK=0;SIMPLESVMHOOK_ENABLE_PERFCOUNTER=1;DBG=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SupportJustMyCode>false</SupportJustMyCode>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PreprocessorDefinitions>POOL_NX_OPTIN=1;SIMPLESVMHOOK_SINGLE_HOOK=0;SIMPLESVMHOOK_ENABLE_PERFCOUNTER=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <WholeProgramOptimization>true</WholeProgramOptimization>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+    </ClCompile>
+    <Link>
+      <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <FilesToPackage Include="$(TargetPath)" />
+  </ItemGroup>
+  <ItemGroup>
+    <MASM Include="x64.asm" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="HookVmmAlwaysOptimized.hpp" />
+    <ClInclude Include="HookCommon.hpp" />
+    <ClInclude Include="HookKernelHandlers.hpp" />
+    <ClInclude Include="HookKernelCommon.hpp" />
+    <ClInclude Include="Common.hpp" />
+    <ClInclude Include="HookKernelProcessorData.hpp" />
+    <ClInclude Include="HookKernelRegistration.hpp" />
+    <ClInclude Include="HookVmmCommon.hpp" />
+    <ClInclude Include="Logging.hpp" />
+    <ClInclude Include="Performance.hpp" />
+    <ClInclude Include="PhysicalMemoryDescriptor.hpp" />
+    <ClInclude Include="PowerCallback.hpp" />
+    <ClInclude Include="Virtualization.hpp" />
+    <ClInclude Include="Svm.hpp" />
+    <ClInclude Include="VmmMain.hpp" />
+    <ClInclude Include="x86_64.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="HookVmmAlwaysOptimized.cpp">
+      <Optimization>Full</Optimization>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+    </ClCompile>
+    <ClCompile Include="HookCommon.cpp" />
+    <ClCompile Include="HookKernelHandlers.cpp" />
+    <ClCompile Include="HookKernelCommon.cpp" />
+    <ClCompile Include="HookKernelProcessorData.cpp" />
+    <ClCompile Include="HookKernelRegistration.cpp" />
+    <ClCompile Include="HookVmmCommon.cpp" />
+    <ClCompile Include="Logging.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Performance.cpp" />
+    <ClCompile Include="PhysicalMemoryDescriptor.cpp" />
+    <ClCompile Include="PowerCallback.cpp" />
+    <ClCompile Include="Virtualization.cpp" />
+    <ClCompile Include="VmmMain.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="SimpleSvmHook.ruleset" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
