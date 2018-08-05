@@ -362,19 +362,16 @@ LogpFlushLogBuffer (
     //
     KeAcquireInStackQueuedSpinLock(&Info->SpinLock, &lockHandle);
     oldLogBuffer = Info->LogBufferHead;
-    if (oldLogBuffer[0] != ANSI_NULL)
-    {
-        Info->LogBufferHead = (oldLogBuffer == Info->LogBuffer1) ? Info->LogBuffer2
-                                                                 : Info->LogBuffer1;
-        Info->LogBufferHead[0] = ANSI_NULL;
-        Info->LogBufferTail = Info->LogBufferHead;
-    }
+    Info->LogBufferHead = (oldLogBuffer == Info->LogBuffer1) ? Info->LogBuffer2
+                                                             : Info->LogBuffer1;
+    Info->LogBufferHead[0] = ANSI_NULL;
+    Info->LogBufferTail = Info->LogBufferHead;
     KeReleaseInStackQueuedSpinLock(&lockHandle);
 
     //
     // Write all log entries in old log buffer.
     //
-    for (PSTR currentLogEntry = oldLogBuffer; currentLogEntry[0]; /**/)
+    for (PSTR currentLogEntry = oldLogBuffer; currentLogEntry[0] != ANSI_NULL; /**/)
     {
         BOOLEAN printedOut;
         size_t entryLength;
