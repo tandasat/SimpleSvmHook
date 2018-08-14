@@ -818,7 +818,7 @@ IsSvmSupported (
 
     //
     // Test if the current processor is AMD one. An AMD processor should return
-    // "AuthenticAMD" from CPUID function 0. See "Function 0h—Maximum Standard
+    // "AuthenticAMD" from CPUID function 0. See "Function 0h-Maximum Standard
     // Function Number and Vendor String".
     //
     __cpuid(registers, CPUID_MAX_STANDARD_FN_NUMBER_AND_VENDOR_STRING);

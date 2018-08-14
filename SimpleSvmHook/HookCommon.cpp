@@ -277,7 +277,32 @@ OperateOnNestedPageTables (
         //
         NT_ASSERT(ptEntry->Fields.Valid == FALSE);
         (VOID)BuildNestedPageTableEntry(ptEntry, PhysicalAddress, HookData);
-        // FIXME: set PAT
+
+        //
+        // FIXME: Set the correct memory type. Do not make it WB unconditionally.
+        //
+        // The host PAT type is set to WB because all PAT, PCD, and PWT bits in
+        // the NPT entries are cleared. See "PAT-Register PA-Field Indexing" for
+        // this determination.
+        //
+        // This introduces the following changes in the combined PAT type when
+        // the guest PAT type is:
+        //  UC-, it will be UC
+        //  WC, it will be WC+
+        // See "Combining Guest and Host PAT Types" for this determination.
+        //
+        // This introduces the following changes in the effective PAT type when
+        // the MTRR type is:
+        //  WC, it will be WC while it could have been CD
+        //  WP,WT,WB, it will be WC+ while it could have been WC
+        // See "Combining Memory Types, MTRRs" for this determination.
+        //
+        // This will be unwanted to change, especially for MMIO regions where the
+        // guest PAT type can be one of those affected types (UC- or WC). The
+        // correct fix is probably to look up the guest PTE and copy the caching
+        // related bits (PAT, PCD, and PWT) when constructing NTP entries, so
+        // the combined PAT will always be the same as the guest PAT type.
+        //
     }
     else
     {

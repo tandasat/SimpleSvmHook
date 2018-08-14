@@ -28,7 +28,7 @@ InjectGeneralProtectionException (
 
     //
     // Inject #GP(vector = 13, type = 3 = exception) with a valid error code.
-    // An error code are always zero. See "#GP—General-Protection Exception
+    // An error code are always zero. See "#GP-General-Protection Exception
     // (Vector 13)" for details about the error code.
     //
     event.AsUInt64 = 0;

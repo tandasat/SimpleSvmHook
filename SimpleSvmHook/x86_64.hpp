@@ -51,8 +51,8 @@ typedef struct _APIC_BASE
 } APIC_BASE, *PAPIC_BASE;
 
 //
-// See "4-Kbyte PML4E有ong Mode", "4-Kbyte PDPE有ong Mode",
-// "4-Kbyte PDE有ong Mode",
+// See "4-Kbyte PML4E-Long Mode", "4-Kbyte PDPE-Long Mode",
+// "4-Kbyte PDE-Long Mode",
 //
 typedef struct _PML4_ENTRY_4KB
 {
@@ -80,7 +80,7 @@ PD_ENTRY_4KB, *PPD_ENTRY_4KB;
 static_assert(sizeof(PML4_ENTRY_4KB) == 8, "size mismatch");
 
 //
-// See "4-Kbyte PTE有ong Mode".
+// See "4-Kbyte PTE-Long Mode".
 //
 typedef struct _PT_ENTRY_4KB
 {
@@ -108,7 +108,7 @@ typedef struct _PT_ENTRY_4KB
 static_assert(sizeof(PT_ENTRY_4KB) == 8, "size mismatch");
 
 //
-// See "2-Mbyte PML4E有ong Mode" and "2-Mbyte PDPE有ong Mode".
+// See "2-Mbyte PML4E-Long Mode" and "2-Mbyte PDPE-Long Mode".
 //
 typedef struct _PML4_ENTRY_2MB
 {
@@ -136,7 +136,7 @@ static_assert(sizeof(PML4_ENTRY_2MB) == 8,
               "PML4_ENTRY_2MB size mismatch");
 
 //
-// See "2-Mbyte PDE有ong Mode".
+// See "2-Mbyte PDE-Long Mode".
 //
 typedef struct _PD_ENTRY_2MB
 {
@@ -167,7 +167,7 @@ static_assert(sizeof(PD_ENTRY_2MB) == 8,
               "PD_ENTRY_2MB size mismatch");
 
 //
-// See "GDTR and IDTR Format有ong Mode"
+// See "GDTR and IDTR Format-Long Mode"
 //
 #include <pshpack1.h>
 typedef struct _DESCRIPTOR_TABLE_REGISTER
@@ -181,7 +181,7 @@ static_assert(sizeof(DESCRIPTOR_TABLE_REGISTER) == 10,
 
 //
 // See "Long-Mode Segment Descriptors" and some of definitions
-// (eg, "Code-Segment Descriptor有ong Mode")
+// (eg, "Code-Segment Descriptor-Long Mode")
 //
 typedef struct _SEGMENT_DESCRIPTOR
 {
