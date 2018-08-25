@@ -24,7 +24,7 @@ static
 _IRQL_requires_max_(DISPATCH_LEVEL)
 VOID
 DestructNestedPageTablesInternal (
-    _Frees_ptr_ TableType* Table,
+    _In_reads_(512) _Frees_ptr_ TableType* Table,
     _In_ ULONG TableLevel
     )
 {
@@ -79,7 +79,7 @@ static
 _IRQL_requires_max_(DISPATCH_LEVEL)
 VOID
 DestructNestedPageTables (
-    _Frees_ptr_ PPML4_ENTRY_4KB Pml4Table
+    _In_reads_(512) _Frees_ptr_ PPML4_ENTRY_4KB Pml4Table
     )
 {
     DestructNestedPageTablesInternal(Pml4Table, 4);
@@ -208,7 +208,7 @@ Exit:
         the DestructNestedPageTables function as they are already referenced
         from NPT PML4.
 
-    @param[in,out] Entries - The address of pre-allocated entries to free.
+    @param[in] Entries - The address of pre-allocated entries to free.
 
     @param[in] NumberOfEntries - The number of Entries.
 
@@ -219,9 +219,9 @@ static
 _IRQL_requires_max_(DISPATCH_LEVEL)
 VOID
 CleanupPreAllocateEntries (
-    _Inout_updates_(NumberOfEntries) PVOID* Entries,
+    _In_reads_(NumberOfEntries) PVOID* Entries,
     _In_ ULONG NumberOfEntries,
-    _In_ ULONG NumberOfUsedEntries
+    _In_ _In_range_(0, NumberOfEntries) ULONG NumberOfUsedEntries
     )
 {
     for (ULONG i = NumberOfUsedEntries; i < NumberOfEntries; ++i)
