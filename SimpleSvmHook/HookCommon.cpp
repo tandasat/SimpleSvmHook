@@ -80,7 +80,7 @@ AllocateNptEntry (
     }
     else
     {
-        entry = ExAllocatePoolWithTag(NonPagedPool, PAGE_SIZE, k_PerformancePoolTag);
+        entry = ExAllocatePoolWithTag(NonPagedPool, PAGE_SIZE, k_PoolTag);
         if (entry == nullptr)
         {
             goto Exit;

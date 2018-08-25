@@ -33,7 +33,7 @@
 //
 // The pool tag.
 //
-static const ULONG k_PerformancePoolTag = 'MVSS';
+static const ULONG k_PoolTag = 'MVSS';
 
 //
 // The handy macros to specify at which section the code placed.

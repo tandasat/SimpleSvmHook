@@ -128,7 +128,7 @@ GetSharedMemoryEntry (
     // original contents.
     //
 #pragma prefast(suppress : 28118, "DISPATCH_LEVEL is ok as this always allocates NonPagedPool")
-    execPage = ExAllocatePoolWithTag(NonPagedPool, PAGE_SIZE, k_PerformancePoolTag);
+    execPage = ExAllocatePoolWithTag(NonPagedPool, PAGE_SIZE, k_PoolTag);
     if (execPage == nullptr)
     {
         LOGGING_LOG_ERROR("ExAllocatePoolWithTag failed : %lu", PAGE_SIZE);
@@ -176,7 +176,7 @@ Exit:
     {
         if (execPage != nullptr)
         {
-            ExFreePoolWithTag(execPage, k_PerformancePoolTag);
+            ExFreePoolWithTag(execPage, k_PoolTag);
         }
     }
     return status;
@@ -377,7 +377,7 @@ InstallHookOnExecPage (
 #pragma prefast(suppress : 30030, "Intentionally executable")
     originalCallStub = ExAllocatePoolWithTag(NonPagedPoolExecute,
                                              instrLength + sizeof(jmpCode),
-                                             k_PerformancePoolTag);
+                                             k_PoolTag);
     if (originalCallStub == nullptr)
     {
         LOGGING_LOG_ERROR("ExAllocatePoolWithTag failed : %Iu",
@@ -491,7 +491,7 @@ Exit:
     {
         if (originalCallStub != nullptr)
         {
-            ExFreePoolWithTag(originalCallStub, k_PerformancePoolTag);
+            ExFreePoolWithTag(originalCallStub, k_PoolTag);
         }
     }
     return status;
@@ -561,7 +561,7 @@ Exit:
             if (registration.HookEntry.OriginalCallStub != nullptr)
             {
                 ExFreePoolWithTag(registration.HookEntry.OriginalCallStub,
-                                  k_PerformancePoolTag);
+                                  k_PoolTag);
             }
         }
         for (auto& sharedMemoryEntry : g_HookSharedMemoryEntries)
@@ -570,7 +570,7 @@ Exit:
             {
                 MmUnlockPages(sharedMemoryEntry.HookAddressMdl);
                 IoFreeMdl(sharedMemoryEntry.HookAddressMdl);
-                ExFreePoolWithTag(sharedMemoryEntry.ExecPage, k_PerformancePoolTag);
+                ExFreePoolWithTag(sharedMemoryEntry.ExecPage, k_PoolTag);
             }
         }
     }
@@ -590,13 +590,13 @@ CleanupHookRegistrationEntries (
     for (auto& registration : g_HookRegistrationEntries)
     {
         ExFreePoolWithTag(registration.HookEntry.OriginalCallStub,
-                          k_PerformancePoolTag);
+                          k_PoolTag);
     }
     for (auto& sharedMemoryEntry : g_HookSharedMemoryEntries)
     {
         MmUnlockPages(sharedMemoryEntry.HookAddressMdl);
         IoFreeMdl(sharedMemoryEntry.HookAddressMdl);
-        ExFreePoolWithTag(sharedMemoryEntry.ExecPage, k_PerformancePoolTag);
+        ExFreePoolWithTag(sharedMemoryEntry.ExecPage, k_PoolTag);
     }
 }
 

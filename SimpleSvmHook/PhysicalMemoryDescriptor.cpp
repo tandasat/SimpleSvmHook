@@ -76,7 +76,7 @@ DuplicatePhysicalMemoryDescriptor (
     descriptorSize = sizeof(PHYSICAL_MEMORY_DESCRIPTOR) +
         sizeof(PHYSICAL_MEMORY_RUN) * (numberOfRuns - 1);
     descriptor = reinterpret_cast<PPHYSICAL_MEMORY_DESCRIPTOR>(
-                ExAllocatePoolWithTag(NonPagedPool, descriptorSize, k_PerformancePoolTag));
+                ExAllocatePoolWithTag(NonPagedPool, descriptorSize, k_PoolTag));
     if (descriptor == nullptr)
     {
         goto Exit;
@@ -120,7 +120,7 @@ FreePhysicalMemoryDescriptor (
     PPHYSICAL_MEMORY_DESCRIPTOR Descriptor
     )
 {
-    ExFreePoolWithTag(Descriptor, k_PerformancePoolTag);
+    ExFreePoolWithTag(Descriptor, k_PoolTag);
 }
 
 /*!

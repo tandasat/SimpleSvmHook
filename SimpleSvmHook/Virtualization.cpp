@@ -63,7 +63,7 @@ AllocatePageAlingedPhysicalMemory (
     NT_ASSERT(NumberOfBytes >= PAGE_SIZE);
 
 #pragma prefast(suppress : 28118, "DISPATCH_LEVEL is ok as this always allocates NonPagedPool")
-    memory = ExAllocatePoolWithTag(NonPagedPool, NumberOfBytes, k_PerformancePoolTag);
+    memory = ExAllocatePoolWithTag(NonPagedPool, NumberOfBytes, k_PoolTag);
     if (memory != nullptr)
     {
         NT_ASSERT(PAGE_ALIGN(memory) == memory);
@@ -85,7 +85,7 @@ FreePageAlingedPhysicalMemory (
     _Frees_ptr_ PVOID BaseAddress
     )
 {
-    ExFreePoolWithTag(BaseAddress, k_PerformancePoolTag);
+    ExFreePoolWithTag(BaseAddress, k_PoolTag);
 }
 
 /*!
@@ -290,7 +290,7 @@ DevirtualizeProcessor (
     // of per processor data to be freed.
     //
     __cpuidex(registers, CPUID_LEAF_SIMPLE_SVM_CALL, CPUID_SUBLEAF_UNLOAD_SIMPLE_SVM);
-    NT_ASSERT(registers[2] == k_PerformancePoolTag);
+    NT_ASSERT(registers[2] == k_PoolTag);
     LOGGING_LOG_INFO("The processor has been de-virtualized.");
 
     //
@@ -635,7 +635,7 @@ VirtualizeProcessor (
     contextRecord = reinterpret_cast<PCONTEXT>(ExAllocatePoolWithTag(
                                                         NonPagedPool,
                                                         sizeof(*contextRecord),
-                                                        k_PerformancePoolTag));
+                                                        k_PoolTag));
     if (contextRecord == nullptr)
     {
         LOGGING_LOG_ERROR("ExAllocatePoolWithTag failed : %Iu",
@@ -721,7 +721,7 @@ VirtualizeProcessor (
 Exit:
     if (contextRecord != nullptr)
     {
-        ExFreePoolWithTag(contextRecord, k_PerformancePoolTag);
+        ExFreePoolWithTag(contextRecord, k_PoolTag);
     }
     if (!NT_SUCCESS(status))
     {
@@ -915,7 +915,7 @@ VirtualizeAllProcessors (
     sharedVpData = reinterpret_cast<PSHARED_VIRTUAL_PROCESSOR_DATA>(ExAllocatePoolWithTag(
                                         NonPagedPool,
                                         sizeof(SHARED_VIRTUAL_PROCESSOR_DATA),
-                                        k_PerformancePoolTag));
+                                        k_PoolTag));
     if (sharedVpData == nullptr)
     {
         LOGGING_LOG_ERROR("ExAllocatePoolWithTag failed : %Iu",

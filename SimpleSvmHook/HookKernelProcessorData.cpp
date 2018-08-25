@@ -60,14 +60,14 @@ DestructNestedPageTablesInternal (
             //
             // Table == PDT, subTable == PT
             //
-            ExFreePoolWithTag(subTable, k_PerformancePoolTag);
+            ExFreePoolWithTag(subTable, k_PoolTag);
             break;
 
         default:
             NT_ASSERT(false);
         }
     }
-    ExFreePoolWithTag(Table, k_PerformancePoolTag);
+    ExFreePoolWithTag(Table, k_PoolTag);
 }
 
 /*!
@@ -135,7 +135,7 @@ BuildNestedPageTables (
     pml4Table = reinterpret_cast<PPML4_ENTRY_4KB>(ExAllocatePoolWithTag(
                                                                 NonPagedPool,
                                                                 PAGE_SIZE,
-                                                                k_PerformancePoolTag));
+                                                                k_PoolTag));
     if (pml4Table == nullptr)
     {
         status = STATUS_INSUFFICIENT_RESOURCES;
@@ -230,7 +230,7 @@ CleanupPreAllocateEntries (
         {
             break;
         }
-        ExFreePoolWithTag(Entries[i], k_PerformancePoolTag);
+        ExFreePoolWithTag(Entries[i], k_PoolTag);
     }
 }
 
@@ -305,7 +305,7 @@ InitializeHookData (
 #pragma prefast(suppress : 28118, "DISPATCH_LEVEL is ok as this always allocates NonPagedPool")
     hookData = reinterpret_cast<PHOOK_DATA>(ExAllocatePoolWithTag(NonPagedPool,
                                                                   sizeof(*hookData),
-                                                                  k_PerformancePoolTag));
+                                                                  k_PoolTag));
     if (hookData == nullptr)
     {
         status = STATUS_INSUFFICIENT_RESOURCES;
@@ -346,7 +346,7 @@ Exit:
             {
                 DestructNestedPageTables(hookData->Pml4Table);
             }
-            ExFreePoolWithTag(hookData, k_PerformancePoolTag);
+            ExFreePoolWithTag(hookData, k_PoolTag);
         }
     }
     return status;
@@ -371,7 +371,7 @@ CleanupHookData (
                               RTL_NUMBER_OF(HookData->PreAllocatedNptEntries),
                               HookData->UsedPreAllocatedEntriesCount);
     DestructNestedPageTables(HookData->Pml4Table);
-    ExFreePoolWithTag(HookData, k_PerformancePoolTag);
+    ExFreePoolWithTag(HookData, k_PoolTag);
 }
 
 /*!
