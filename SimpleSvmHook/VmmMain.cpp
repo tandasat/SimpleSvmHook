@@ -16,7 +16,7 @@
 /*!
     @brief Injects #GP with 0 of error code into the guest.
 
-    @param[inout] VpData - The address of per processor data.
+    @param[in,out] VpData - The address of per processor data.
  */
 static
 VOID
@@ -52,9 +52,9 @@ InjectGeneralProtectionException (
         https://msdn.microsoft.com/en-us/library/windows/hardware/Dn613994(v=vs.85).aspx
         for details of the interface.
 
-    @param[inout] VpData - The address of per processor data.
+    @param[in,out] VpData - The address of per processor data.
 
-    @param[inout] GuestContext - The address of the guest GPRs.
+    @param[in,out] GuestContext - The address of the guest GPRs.
  */
 static
 VOID
@@ -155,9 +155,9 @@ HandleCpuid (
     @details This protects EFER.SVME from being cleared by the guest by
         injecting #GP when it is about to be cleared.
 
-    @param[inout] VpData - The address of per processor data.
+    @param[in,out] VpData - The address of per processor data.
 
-    @param[inout] GuestContext - The address of the guest GPRs.
+    @param[in,out] GuestContext - The address of the guest GPRs.
  */
 static
 VOID
@@ -211,9 +211,9 @@ HandleMsrAccess (
 
     @details This function always injects #GP to the guest.
 
-    @param[inout] VpData - The address of per processor data.
+    @param[in,out] VpData - The address of per processor data.
 
-    @param[inout] GuestContext - The address of the guest GPRs.
+    @param[in,out] GuestContext - The address of the guest GPRs.
  */
 static
 VOID
@@ -242,9 +242,9 @@ HandleVmrun (
         this function loads guest state, disables SVM and returns to execution
         flow where the #VMEXIT triggered.
 
-    @param[inout] VpData - The address of per processor data.
+    @param[in,out] VpData - The address of per processor data.
 
-    @param[inout] GuestRegisters - The address of the guest GPRs.
+    @param[in,out] GuestRegisters - The address of the guest GPRs.
 
     @return TRUE when virtualization is terminated; otherwise FALSE.
  */
@@ -275,7 +275,7 @@ HandleVmExit (
     // Verifier. This protects developers from accidentally writing such #VMEXIT
     // handling code. This should actually raise IRQL to HIGH_LEVEL to represent
     // this running context better, but our Logger code is not designed to run at
-    // that level unfortunatelly. Finally, note that this API is a thin wrapper
+    // that level unfortunately. Finally, note that this API is a thin wrapper
     // of mov-to-CR8 on x64 and safe to call on this context.
     //
     oldIrql = KeGetCurrentIrql();

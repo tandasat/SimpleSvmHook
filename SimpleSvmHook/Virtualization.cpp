@@ -758,7 +758,7 @@ Exit:
         locates an offset for IA32_MSR_EFER and sets the MSB bit. For details
         of logic, see "MSR Intercepts".
 
-    @param[inout] MsrPermissionsMap - The MSRPM to set up.
+    @param[in,out] MsrPermissionsMap - The MSRPM to set up.
  */
 static
 VOID

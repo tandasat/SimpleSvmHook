@@ -219,7 +219,7 @@ OperateOnNestedPageTables (
         }
     }
     pageDirectoryPointerTable = reinterpret_cast<PPDP_ENTRY_4KB>(GetVaFromPfn(
-        pml4Entry->Fields.PageFrameNumber));
+                                            pml4Entry->Fields.PageFrameNumber));
 
     //
     // PDPT (1 GB)
@@ -239,7 +239,7 @@ OperateOnNestedPageTables (
         }
     }
     pageDirectoryTable = reinterpret_cast<PPD_ENTRY_4KB>(GetVaFromPfn(
-        pdptEntry->Fields.PageFrameNumber));
+                                            pdptEntry->Fields.PageFrameNumber));
 
     //
     // PDT (2 MB)
@@ -259,7 +259,7 @@ OperateOnNestedPageTables (
         }
     }
     pageTable = reinterpret_cast<PPT_ENTRY_4KB>(GetVaFromPfn(
-        pdtEntry->Fields.PageFrameNumber));
+                                            pdtEntry->Fields.PageFrameNumber));
 
     //
     // PT (4 KB)
@@ -279,29 +279,34 @@ OperateOnNestedPageTables (
         (VOID)BuildNestedPageTableEntry(ptEntry, PhysicalAddress, HookData);
 
         //
-        // FIXME: Set the correct memory type. Do not make it WB unconditionally.
+        // We do not explicitly configure PAT in the NPT entry. The consequences
+        // of this are: 1) pages whose PAT (Page Attribute Table) type is the
+        // Write-Combining (WC) memory type could be treated as the
+        // Write-Combining Plus (WC+) while it should be WC when the MTRR type is
+        // either Write Protect (WP), Writethrough (WT) or Writeback (WB), and
+        // 2) pages whose PAT type is Uncacheable Minus (UC-) could be treated
+        // as Cache Disabled (CD) while it should be WC, when MTRR type is WC.
         //
-        // The host PAT type is set to WB because all PAT, PCD, and PWT bits in
-        // the NPT entries are cleared. See "PAT-Register PA-Field Indexing" for
-        // this determination.
+        // While those are not desirable, this is acceptable given that 1) only
+        // introduces additional cache snooping and associated performance
+        // penalty, which would not be significant since WC+ still lets
+        // processors combine multiple writes into one and avoid large
+        // performance penalty due to frequent writes to memory without caching.
+        // 2) might be worse but I have not seen MTRR ranges configured as WC
+        // on testing, hence the unintentional UC- will just results in the same
+        // effective memory type as what would be with UC.
         //
-        // This introduces the following changes in the combined PAT type when
-        // the guest PAT type is:
-        //  UC-, it will be UC
-        //  WC, it will be WC+
-        // See "Combining Guest and Host PAT Types" for this determination.
+        // See "Memory Types" (7.4), for details of memory types,
+        // "PAT-Register PA-Field Indexing", "Combining Guest and Host PAT Types",
+        // and "Combining PAT and MTRR Types" for how the effective memory type
+        // is determined based on Guest PAT type, Host PAT type, and the MTRR
+        // type.
         //
-        // This introduces the following changes in the effective PAT type when
-        // the MTRR type is:
-        //  WC, it will be WC while it could have been CD
-        //  WP,WT,WB, it will be WC+ while it could have been WC
-        // See "Combining Memory Types, MTRRs" for this determination.
-        //
-        // This will be unwanted to change, especially for MMIO regions where the
-        // guest PAT type can be one of those affected types (UC- or WC). The
-        // correct fix is probably to look up the guest PTE and copy the caching
-        // related bits (PAT, PCD, and PWT) when constructing NTP entries, so
-        // the combined PAT will always be the same as the guest PAT type.
+        // The correct approach may be to look up the guest PTE and copy the
+        // caching related bits (PAT, PCD, and PWT) when constructing NTP
+        // entries for non RAM regions, so the combined PAT will always be the
+        // same as the guest PAT type. This may be done when any issue manifests
+        // with the current implementation.
         //
     }
     else

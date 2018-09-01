@@ -3,7 +3,7 @@
 root = true
 
 # All C++ files
-[*.{cpp,hpp}]
+[*.{cpp,hpp,asm}]
 charset = utf-8
 indent_style = space
 indent_size = 4
