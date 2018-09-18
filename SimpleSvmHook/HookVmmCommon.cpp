@@ -550,7 +550,7 @@ InjectBreakPointException (
     // Advance the guest RIP. When #BP is delivered, RIP must points to the
     // next instruction.
     //
-    GuestVmcb->StateSaveArea.Rip++;
+    GuestVmcb->StateSaveArea.Rip = GuestVmcb->ControlArea.NRip;
 }
 
 /*!
