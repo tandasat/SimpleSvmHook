@@ -5,7 +5,7 @@
 
     @author Satoshi Tanda
 
-    @copyright Copyright (c) 2018, Satoshi Tanda. All rights reserved.
+    @copyright Copyright (c) 2018-2019, Satoshi Tanda. All rights reserved.
  */
 #include "HookKernelProcessorData.hpp"
 #include "Common.hpp"
@@ -46,14 +46,14 @@ DestructNestedPageTablesInternal (
             //
             // Table == PML4, subTable == PDPT
             //
-            DestructNestedPageTablesInternal(reinterpret_cast<PPDP_ENTRY_4KB>(subTable), 3);
+            DestructNestedPageTablesInternal(static_cast<PPDP_ENTRY_4KB>(subTable), 3);
             break;
 
         case 3:
             //
             // Table == PDPT, subTable == PDT
             //
-            DestructNestedPageTablesInternal(reinterpret_cast<PPD_ENTRY_4KB>(subTable), 2);
+            DestructNestedPageTablesInternal(static_cast<PPD_ENTRY_4KB>(subTable), 2);
             break;
 
         case 2:
@@ -132,7 +132,7 @@ BuildNestedPageTables (
     // Create a PML4 table which manages up to 512GB of physical address.
     //
 #pragma prefast(suppress : 28118, "DISPATCH_LEVEL is ok as this always allocates NonPagedPool")
-    pml4Table = reinterpret_cast<PPML4_ENTRY_4KB>(ExAllocatePoolWithTag(
+    pml4Table = static_cast<PPML4_ENTRY_4KB>(ExAllocatePoolWithTag(
                                                                 NonPagedPool,
                                                                 PAGE_SIZE,
                                                                 k_PoolTag));
@@ -303,9 +303,9 @@ InitializeHookData (
     // Allocate hook data.
     //
 #pragma prefast(suppress : 28118, "DISPATCH_LEVEL is ok as this always allocates NonPagedPool")
-    hookData = reinterpret_cast<PHOOK_DATA>(ExAllocatePoolWithTag(NonPagedPool,
-                                                                  sizeof(*hookData),
-                                                                  k_PoolTag));
+    hookData = static_cast<PHOOK_DATA>(ExAllocatePoolWithTag(NonPagedPool,
+                                                             sizeof(*hookData),
+                                                             k_PoolTag));
     if (hookData == nullptr)
     {
         status = STATUS_INSUFFICIENT_RESOURCES;

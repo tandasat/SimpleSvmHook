@@ -5,7 +5,7 @@
 
     @author Satoshi Tanda
 
-    @copyright Copyright (c) 2018, Satoshi Tanda. All rights reserved.
+    @copyright Copyright (c) 2018-2019, Satoshi Tanda. All rights reserved.
  */
 #include "HookCommon.hpp"
 #include "Common.hpp"
@@ -218,7 +218,7 @@ OperateOnNestedPageTables (
             goto Exit;
         }
     }
-    pageDirectoryPointerTable = reinterpret_cast<PPDP_ENTRY_4KB>(GetVaFromPfn(
+    pageDirectoryPointerTable = static_cast<PPDP_ENTRY_4KB>(GetVaFromPfn(
                                             pml4Entry->Fields.PageFrameNumber));
 
     //
@@ -238,7 +238,7 @@ OperateOnNestedPageTables (
             goto Exit;
         }
     }
-    pageDirectoryTable = reinterpret_cast<PPD_ENTRY_4KB>(GetVaFromPfn(
+    pageDirectoryTable = static_cast<PPD_ENTRY_4KB>(GetVaFromPfn(
                                             pdptEntry->Fields.PageFrameNumber));
 
     //
@@ -258,7 +258,7 @@ OperateOnNestedPageTables (
             goto Exit;
         }
     }
-    pageTable = reinterpret_cast<PPT_ENTRY_4KB>(GetVaFromPfn(
+    pageTable = static_cast<PPT_ENTRY_4KB>(GetVaFromPfn(
                                             pdtEntry->Fields.PageFrameNumber));
 
     //

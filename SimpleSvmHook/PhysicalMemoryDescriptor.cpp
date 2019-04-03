@@ -5,7 +5,7 @@
 
     @author Satoshi Tanda
 
-    @copyright Copyright (c) 2018, Satoshi Tanda. All rights reserved.
+    @copyright Copyright (c) 2018-2019, Satoshi Tanda. All rights reserved.
  */
 #include "PhysicalMemoryDescriptor.hpp"
 #include "Common.hpp"
@@ -75,7 +75,7 @@ DuplicatePhysicalMemoryDescriptor (
     //
     descriptorSize = sizeof(PHYSICAL_MEMORY_DESCRIPTOR) +
         sizeof(PHYSICAL_MEMORY_RUN) * (numberOfRuns - 1);
-    descriptor = reinterpret_cast<PPHYSICAL_MEMORY_DESCRIPTOR>(
+    descriptor = static_cast<PPHYSICAL_MEMORY_DESCRIPTOR>(
                 ExAllocatePoolWithTag(NonPagedPool, descriptorSize, k_PoolTag));
     if (descriptor == nullptr)
     {

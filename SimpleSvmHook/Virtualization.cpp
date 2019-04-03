@@ -5,7 +5,7 @@
 
     @author Satoshi Tanda
 
-    @copyright Copyright (c) 2018, Satoshi Tanda. All rights reserved.
+    @copyright Copyright (c) 2018-2019, Satoshi Tanda. All rights reserved.
  */
 #include "Virtualization.hpp"
 #include "Common.hpp"
@@ -304,7 +304,7 @@ DevirtualizeProcessor (
     //
     // Save an address of shared data, then free per processor data.
     //
-    sharedVpDataPtr = reinterpret_cast<PSHARED_VIRTUAL_PROCESSOR_DATA*>(Context);
+    sharedVpDataPtr = static_cast<PSHARED_VIRTUAL_PROCESSOR_DATA*>(Context);
     *sharedVpDataPtr = vpData->HostStackLayout.SharedVpData;
     CleanupHookData(vpData->HookData);
     FreePageAlingedPhysicalMemory(vpData);
@@ -632,7 +632,7 @@ VirtualizeProcessor (
     _Analysis_assume_(ARGUMENT_PRESENT(Context));
 
 #pragma prefast(suppress : 28118, "DISPATCH_LEVEL is ok as this always allocates NonPagedPool")
-    contextRecord = reinterpret_cast<PCONTEXT>(ExAllocatePoolWithTag(
+    contextRecord = static_cast<PCONTEXT>(ExAllocatePoolWithTag(
                                                         NonPagedPool,
                                                         sizeof(*contextRecord),
                                                         k_PoolTag));
@@ -648,7 +648,7 @@ VirtualizeProcessor (
     // Allocate per processor data.
     //
 #pragma prefast(suppress : __WARNING_MEMORY_LEAK, "Ownership is taken on success.")
-    vpData = reinterpret_cast<PVIRTUAL_PROCESSOR_DATA>(AllocatePageAlingedPhysicalMemory(
+    vpData = static_cast<PVIRTUAL_PROCESSOR_DATA>(AllocatePageAlingedPhysicalMemory(
                                                 sizeof(VIRTUAL_PROCESSOR_DATA)));
     if (vpData == nullptr)
     {
@@ -684,7 +684,7 @@ VirtualizeProcessor (
     if (IsOurHypervisorInstalled() == FALSE)
     {
         LOGGING_LOG_INFO("Attempting to virtualize the processor.");
-        sharedVpData = reinterpret_cast<PSHARED_VIRTUAL_PROCESSOR_DATA>(Context);
+        sharedVpData = static_cast<PSHARED_VIRTUAL_PROCESSOR_DATA>(Context);
 
         //
         // Enable SVM by setting EFER.SVME. It has already been verified that this
@@ -777,7 +777,7 @@ BuildMsrPermissionsMap (
     // Setup and clear all bits, indicating no MSR access should be intercepted.
     //
     RtlInitializeBitMap(&bitmapHeader,
-                        reinterpret_cast<PULONG>(MsrPermissionsMap),
+                        static_cast<PULONG>(MsrPermissionsMap),
                         SVM_MSR_PERMISSIONS_MAP_SIZE * CHAR_BIT);
     RtlClearAllBits(&bitmapHeader);
 
@@ -912,7 +912,7 @@ VirtualizeAllProcessors (
     // page tables used for Nested Page Tables.
     //
 #pragma prefast(suppress : __WARNING_MEMORY_LEAK, "Ownership is taken on success.")
-    sharedVpData = reinterpret_cast<PSHARED_VIRTUAL_PROCESSOR_DATA>(ExAllocatePoolWithTag(
+    sharedVpData = static_cast<PSHARED_VIRTUAL_PROCESSOR_DATA>(ExAllocatePoolWithTag(
                                         NonPagedPool,
                                         sizeof(SHARED_VIRTUAL_PROCESSOR_DATA),
                                         k_PoolTag));

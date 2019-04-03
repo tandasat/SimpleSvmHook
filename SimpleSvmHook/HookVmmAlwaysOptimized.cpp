@@ -5,7 +5,7 @@
 
     @author Satoshi Tanda
 
-    @copyright  Copyright (c) 2018, Satoshi Tanda. All rights reserved.
+    @copyright  Copyright (c) 2018-2019, Satoshi Tanda. All rights reserved.
  */
 #include "HookVmmAlwaysOptimized.hpp"
 #include "Common.hpp"
@@ -45,7 +45,7 @@ ChangePermissionOfPage (
     pxeIndex = GetPxeIndex(PhysicalAddress);
     pml4Entry = &Pml4Table[pxeIndex];
     NT_ASSERT(pml4Entry->Fields.Valid != FALSE);
-    pageDirectoryPointerTable = reinterpret_cast<PPDP_ENTRY_4KB>(GetVaFromPfn(
+    pageDirectoryPointerTable = static_cast<PPDP_ENTRY_4KB>(GetVaFromPfn(
                                             pml4Entry->Fields.PageFrameNumber));
 
     //
@@ -55,7 +55,7 @@ ChangePermissionOfPage (
     ppeIndex = GetPpeIndex(PhysicalAddress);
     pdptEntry = &pageDirectoryPointerTable[ppeIndex];
     NT_ASSERT(pdptEntry->Fields.Valid != FALSE);
-    pageDirectoryTable = reinterpret_cast<PPD_ENTRY_4KB>(GetVaFromPfn(
+    pageDirectoryTable = static_cast<PPD_ENTRY_4KB>(GetVaFromPfn(
                                             pdptEntry->Fields.PageFrameNumber));
 
     //
@@ -118,7 +118,7 @@ ChangePermissionOfPage (
     pdeIndex = GetPdeIndex(PhysicalAddress);
     pdtEntry = &pageDirectoryTable[pdeIndex];
     NT_ASSERT(pdtEntry->Fields.Valid != FALSE);
-    pageTable = reinterpret_cast<PPT_ENTRY_4KB>(GetVaFromPfn(
+    pageTable = static_cast<PPT_ENTRY_4KB>(GetVaFromPfn(
                                             pdtEntry->Fields.PageFrameNumber));
 
     if ((DisallowExecution == FALSE) &&
@@ -179,7 +179,7 @@ MakeAllSubTablesExecutable (
     ppeIndex = GetPpeIndex(ActiveHookPa);
     pdptEntry = &PageDirectoryPointerTable[ppeIndex];
     NT_ASSERT(pdptEntry->Fields.Valid != FALSE);
-    pageDirectoryTable = reinterpret_cast<PPD_ENTRY_4KB>(GetVaFromPfn(
+    pageDirectoryTable = static_cast<PPD_ENTRY_4KB>(GetVaFromPfn(
                                             pdptEntry->Fields.PageFrameNumber));
     for (pdeIndex = 0; pdeIndex < 512; ++pdeIndex)
     {
@@ -194,7 +194,7 @@ MakeAllSubTablesExecutable (
     pdeIndex = GetPdeIndex(ActiveHookPa);
     pdtEntry = &pageDirectoryTable[pdeIndex];
     NT_ASSERT(pdtEntry->Fields.Valid != FALSE);
-    pageTable = reinterpret_cast<PPT_ENTRY_4KB>(GetVaFromPfn(
+    pageTable = static_cast<PPT_ENTRY_4KB>(GetVaFromPfn(
                                             pdtEntry->Fields.PageFrameNumber));
     for (pteIndex = 0; pteIndex < 512; ++pteIndex)
     {
@@ -255,7 +255,7 @@ ChangePermissionsOfAllPages (
     //         | |    |
     //
     pml4Entry = &Pml4Table[0];
-    pageDirectoryPointerTable = reinterpret_cast<PPD_ENTRY_4KB>(GetVaFromPfn(
+    pageDirectoryPointerTable = static_cast<PPD_ENTRY_4KB>(GetVaFromPfn(
                                             pml4Entry->Fields.PageFrameNumber));
 
     for (ULONG ppeIndex = 0; ppeIndex < MaxPpeIndex; ++ppeIndex)

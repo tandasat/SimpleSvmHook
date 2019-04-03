@@ -5,7 +5,7 @@
 
     @author Satoshi Tanda
 
-    @copyright Copyright (c) 2018, Satoshi Tanda. All rights reserved.
+    @copyright Copyright (c) 2018-2019, Satoshi Tanda. All rights reserved.
  */
 #include "HookKernelRegistration.hpp"
 #include "Common.hpp"
@@ -344,7 +344,7 @@ InstallHookOnExecPage (
     {
         PCUCHAR bytes;
 
-        bytes = reinterpret_cast<PCUCHAR>(HookAddress);
+        bytes = static_cast<PCUCHAR>(HookAddress);
         LOGGING_LOG_ERROR("No supported byte pattern found at %p", HookAddress);
         LOGGING_LOG_ERROR("Pattern: "
                           "%02x %02x %02x %02x %02x "
@@ -404,8 +404,8 @@ InstallHookOnExecPage (
     // Install a breakpoint to the exec page so that the hypervisor can tell
     // when it is being executed.
     //
-    hookAddrInExecPage = reinterpret_cast<PUCHAR>(Add2Ptr(ExecPage,
-                                                          BYTE_OFFSET(HookAddress)));
+    hookAddrInExecPage = static_cast<PUCHAR>(Add2Ptr(ExecPage,
+                                                     BYTE_OFFSET(HookAddress)));
     *hookAddrInExecPage = 0xcc;
     (VOID)KeInvalidateAllCaches();
 

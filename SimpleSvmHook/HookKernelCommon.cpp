@@ -5,7 +5,7 @@
 
     @author Satoshi Tanda
 
-    @copyright Copyright (c) 2018, Satoshi Tanda. All rights reserved.
+    @copyright Copyright (c) 2018-2019, Satoshi Tanda. All rights reserved.
  */
 #include "HookKernelCommon.hpp"
 #include "Common.hpp"
@@ -114,7 +114,7 @@ AreAllHooksInvisible (
     {
         NT_ASSERT(registration.HookEntry.HookAddress != nullptr);
 
-        if (*reinterpret_cast<PCUCHAR>(registration.HookEntry.HookAddress) == 0xcc)
+        if (*static_cast<PCUCHAR>(registration.HookEntry.HookAddress) == 0xcc)
         {
             LOGGING_LOG_WARN("Hook at %p for %wZ is visible",
                              registration.HookEntry.HookAddress,

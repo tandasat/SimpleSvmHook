@@ -5,7 +5,7 @@
 
     @author Satoshi Tanda
 
-    @copyright Copyright (c) 2018, Satoshi Tanda. All rights reserved.
+    @copyright Copyright (c) 2018-2019, Satoshi Tanda. All rights reserved.
  */
 #include "Performance.hpp"
 #include "Logging.hpp"
@@ -343,7 +343,7 @@ InitializePerformance (
 
     PAGED_CODE();
 
-    collector = reinterpret_cast<PerfCollector*>(ExAllocatePoolWithTag(
+    collector = static_cast<PerfCollector*>(ExAllocatePoolWithTag(
                                                             NonPagedPool,
                                                             sizeof(*collector),
                                                             k_PerformancePoolTag));

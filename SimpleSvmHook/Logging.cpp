@@ -8,7 +8,7 @@
 
     @author Satoshi Tanda
 
-    @copyright Copyright (c) 2018, Satoshi Tanda. All rights reserved.
+    @copyright Copyright (c) 2018-2019, Satoshi Tanda. All rights reserved.
  */
 #include "Logging.hpp"
 #define NTSTRSAFE_NO_CB_FUNCTIONS
@@ -935,9 +935,9 @@ LogpInitializeBufferInfo (
     //
     // Allocate two log buffers on NonPagedPool.
     //
-    Info->LogBuffer1 = reinterpret_cast<PSTR>(ExAllocatePoolWithTag(NonPagedPool,
-                                                                    k_LogpBufferSize,
-                                                                    k_LogpPoolTag));
+    Info->LogBuffer1 = static_cast<PSTR>(ExAllocatePoolWithTag(NonPagedPool,
+                                                               k_LogpBufferSize,
+                                                               k_LogpPoolTag));
     if (Info->LogBuffer1 == nullptr)
     {
         LogpCleanupBufferInfo(Info);
@@ -945,9 +945,9 @@ LogpInitializeBufferInfo (
         goto Exit;
     }
 
-    Info->LogBuffer2 = reinterpret_cast<PSTR>(ExAllocatePoolWithTag(NonPagedPool,
-                                                                    k_LogpBufferSize,
-                                                                    k_LogpPoolTag));
+    Info->LogBuffer2 = static_cast<PSTR>(ExAllocatePoolWithTag(NonPagedPool,
+                                                               k_LogpBufferSize,
+                                                               k_LogpPoolTag));
     if (Info->LogBuffer2 == nullptr)
     {
         LogpCleanupBufferInfo(Info);
@@ -1128,7 +1128,7 @@ LogpReinitializationRoutine (
     NT_ASSERT(ARGUMENT_PRESENT(Context));
     _Analysis_assume_(ARGUMENT_PRESENT(Context));
 
-    info = reinterpret_cast<PLOG_BUFFER_INFO>(Context);
+    info = static_cast<PLOG_BUFFER_INFO>(Context);
     status = LogpInitializeLogFile(info, &reinitRequired);
     if (!NT_SUCCESS(status))
     {
@@ -1308,7 +1308,7 @@ LogpBufferFlushThreadRoutine (
     PAGED_CODE();
 
     status = STATUS_SUCCESS;
-    info = reinterpret_cast<PLOG_BUFFER_INFO>(StartContext);
+    info = static_cast<PLOG_BUFFER_INFO>(StartContext);
     info->BufferFlushThreadStarted = TRUE;
     LOGGING_LOG_DEBUG("Logger thread started");
 

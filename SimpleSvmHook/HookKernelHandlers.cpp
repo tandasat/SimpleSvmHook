@@ -5,7 +5,7 @@
 
     @author Satoshi Tanda
 
-    @copyright Copyright (c) 2018, Satoshi Tanda. All rights reserved.
+    @copyright Copyright (c) 2018-2019, Satoshi Tanda. All rights reserved.
  */
 #include "HookKernelHandlers.hpp"
 #include "Common.hpp"
@@ -59,7 +59,7 @@ GetOriginalCallStub (
         if (registration.Handler == Handler)
         {
             NT_ASSERT(registration.HookEntry.OriginalCallStub);
-            return reinterpret_cast<HandlerType>(registration.HookEntry.OriginalCallStub);
+            return static_cast<HandlerType>(registration.HookEntry.OriginalCallStub);
         }
     }
     NT_ASSERT(false);
