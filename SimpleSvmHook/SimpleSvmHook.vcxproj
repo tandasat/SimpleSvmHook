@@ -50,7 +50,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <PreprocessorDefinitions>POOL_NX_OPTIN=1;SIMPLESVMHOOK_SINGLE_HOOK=0;SIMPLESVMHOOK_ENABLE_PERFCOUNTER=1;DBG=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>POOL_NX_OPTIN=1;SIMPLESVMHOOK_SINGLE_HOOK=0;SIMPLESVMHOOK_ENABLE_PERFCOUNTER=0;DBG=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SupportJustMyCode>false</SupportJustMyCode>
     </ClCompile>
   </ItemDefinitionGroup>

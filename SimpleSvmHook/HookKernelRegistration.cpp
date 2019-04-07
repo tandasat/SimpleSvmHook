@@ -594,9 +594,12 @@ CleanupHookRegistrationEntries (
     }
     for (auto& sharedMemoryEntry : g_HookSharedMemoryEntries)
     {
-        MmUnlockPages(sharedMemoryEntry.HookAddressMdl);
-        IoFreeMdl(sharedMemoryEntry.HookAddressMdl);
-        ExFreePoolWithTag(sharedMemoryEntry.ExecPage, k_PoolTag);
+        if (sharedMemoryEntry.ExecPage != nullptr)
+        {
+            MmUnlockPages(sharedMemoryEntry.HookAddressMdl);
+            IoFreeMdl(sharedMemoryEntry.HookAddressMdl);
+            ExFreePoolWithTag(sharedMemoryEntry.ExecPage, k_PoolTag);
+        }
     }
 }
 
