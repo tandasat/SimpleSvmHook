@@ -5,7 +5,7 @@
 
     @author Satoshi Tanda
 
-    @copyright Copyright (c) 2018-2019, Satoshi Tanda. All rights reserved.
+    @copyright Copyright (c) 2018-2021, Satoshi Tanda. All rights reserved.
  */
 #include "HookCommon.hpp"
 #include "Common.hpp"
@@ -80,12 +80,11 @@ AllocateNptEntry (
     }
     else
     {
-        entry = ExAllocatePoolWithTag(NonPagedPool, PAGE_SIZE, k_PoolTag);
+        entry = AllocateContiguousMemory(PAGE_SIZE);
         if (entry == nullptr)
         {
             goto Exit;
         }
-        RtlZeroMemory(entry, PAGE_SIZE);
     }
 
 Exit:

@@ -5,7 +5,7 @@
 
     @author Satoshi Tanda
 
-    @copyright Copyright (c) 2018-2019, Satoshi Tanda. All rights reserved.
+    @copyright Copyright (c) 2018-2021, Satoshi Tanda. All rights reserved.
  */
 #include "Virtualization.hpp"
 #include "Common.hpp"
@@ -86,64 +86,6 @@ FreePageAlingedPhysicalMemory (
     )
 {
     ExFreePoolWithTag(BaseAddress, k_PoolTag);
-}
-
-/*!
-    @brief Allocates page aligned, zero filled contiguous physical memory.
-
-    @details This function allocates page aligned nonpaged pool where backed
-        by contiguous physical pages. The allocated memory is zero filled and
-        must be freed with FreeContiguousMemory. The allocated memory is
-        executable.
-
-    @param[in] NumberOfBytes - A size of memory to allocate in byte.
-
-    @return A pointer to the allocated memory filled with zero; or NULL when
-        there is insufficient memory to allocate requested size.
- */
-static
-_Post_writable_byte_size_(NumberOfBytes)
-_Post_maybenull_
-_IRQL_requires_max_(DISPATCH_LEVEL)
-_Must_inspect_result_
-PVOID
-AllocateContiguousMemory (
-    _In_ SIZE_T NumberOfBytes
-    )
-{
-    PVOID memory;
-    PHYSICAL_ADDRESS boundary, lowest, highest;
-
-    boundary.QuadPart = lowest.QuadPart = 0;
-    highest.QuadPart = -1;
-
-#pragma prefast(suppress : 30030, "No alternative API on Windows 7.")
-    memory = MmAllocateContiguousMemorySpecifyCacheNode(NumberOfBytes,
-                                                        lowest,
-                                                        highest,
-                                                        boundary,
-                                                        MmCached,
-                                                        MM_ANY_NODE_OK);
-    if (memory != nullptr)
-    {
-        RtlZeroMemory(memory, NumberOfBytes);
-    }
-    return memory;
-}
-
-/*!
-    @brief Frees memory allocated by AllocateContiguousMemory.
-
-    @param[in] BaseAddress - The address returned by AllocateContiguousMemory.
- */
-static
-_IRQL_requires_max_(DISPATCH_LEVEL)
-VOID
-FreeContiguousMemory (
-    _In_ PVOID BaseAddress
-    )
-{
-    MmFreeContiguousMemory(BaseAddress);
 }
 
 /*!

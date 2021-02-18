@@ -5,7 +5,7 @@
 
     @author Satoshi Tanda
 
-    @copyright Copyright (c) 2018-2019, Satoshi Tanda. All rights reserved.
+    @copyright Copyright (c) 2018-2021, Satoshi Tanda. All rights reserved.
  */
 #include "HookKernelProcessorData.hpp"
 #include "Common.hpp"
@@ -60,14 +60,14 @@ DestructNestedPageTablesInternal (
             //
             // Table == PDT, subTable == PT
             //
-            ExFreePoolWithTag(subTable, k_PoolTag);
+            FreeContiguousMemory(subTable);
             break;
 
         default:
             NT_ASSERT(false);
         }
     }
-    ExFreePoolWithTag(Table, k_PoolTag);
+    FreeContiguousMemory(Table);
 }
 
 /*!
@@ -131,17 +131,12 @@ BuildNestedPageTables (
     //
     // Create a PML4 table which manages up to 512GB of physical address.
     //
-#pragma prefast(suppress : 28118, "DISPATCH_LEVEL is ok as this always allocates NonPagedPool")
-    pml4Table = static_cast<PPML4_ENTRY_4KB>(ExAllocatePoolWithTag(
-                                                                NonPagedPool,
-                                                                PAGE_SIZE,
-                                                                k_PoolTag));
+    pml4Table = static_cast<PPML4_ENTRY_4KB>(AllocateContiguousMemory(PAGE_SIZE));
     if (pml4Table == nullptr)
     {
         status = STATUS_INSUFFICIENT_RESOURCES;
         goto Exit;
     }
-    RtlZeroMemory(pml4Table, PAGE_SIZE);
 
     //
     // Build all NTP entries based on the specified physical memory ranges.
@@ -230,7 +225,7 @@ CleanupPreAllocateEntries (
         {
             break;
         }
-        ExFreePoolWithTag(Entries[i], k_PoolTag);
+        FreeContiguousMemory(Entries[i]);
     }
 }
 
