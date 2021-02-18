@@ -117,7 +117,7 @@ This introduces additional performance cost due to more frequent VM-exit (recall
 that the address being hooked is code and much more likely accessed for
 execution).
 
-Secondly, the hook has to remain visibile in some situation. Let us see why.
+Secondly, the hook has to remain visible in some situation. Let us see why.
 
 When the guest attempts to execute the address, the hypervisor:
   1. traps VM-exit caused due to access violation
@@ -236,7 +236,7 @@ Output
 
 All debug output are saved in `C:\Windows\SimpleSvmHook.log`.
 
-This screenshot shows example ouput from installed hooks as well as that those
+This screenshot shows example output from installed hooks as well as that those
 hooks are not visible from the system (the local kernel debugger).
 
 ![HookInstalled](/Images/HookInstalled.png)
@@ -247,7 +247,7 @@ Supported Platforms
 
 - Windows 10 x64 and Windows 7 x64
 - AMD Processors with SVM and NPT support
-- Visual Stidio 15.7.5 or later for compilation
+- Visual Studio 15.7.5 or later for compilation
 
 Note that emulation of NTP in VMware is significantly slow. To try out
 SimpleSvmHook on VMware, set `SIMPLESVMHOOK_SINGLE_HOOK` to 1 and recompile the
