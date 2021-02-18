@@ -24,7 +24,7 @@ static
 _IRQL_requires_max_(DISPATCH_LEVEL)
 VOID
 DestructNestedPageTablesInternal (
-    _In_reads_(512) _Frees_ptr_ TableType* Table,
+    _In_reads_(512) TableType* Table,
     _In_ ULONG TableLevel
     )
 {
@@ -79,7 +79,7 @@ static
 _IRQL_requires_max_(DISPATCH_LEVEL)
 VOID
 DestructNestedPageTables (
-    _In_reads_(512) _Frees_ptr_ PPML4_ENTRY_4KB Pml4Table
+    _In_reads_(512) PPML4_ENTRY_4KB Pml4Table
     )
 {
     DestructNestedPageTablesInternal(Pml4Table, 4);
@@ -115,7 +115,7 @@ BuildNestedPageTables (
     _Out_ PULONG MaxPpeIndex
     )
 {
-    static const ULONG oneGigabyte = 1024 * 1024 * 1024;
+    static constexpr ULONG oneGigabyte = 1024 * 1024 * 1024;
 
     NTSTATUS status;
     PPML4_ENTRY_4KB pml4Table;

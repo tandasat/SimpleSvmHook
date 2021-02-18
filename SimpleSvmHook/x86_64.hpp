@@ -5,12 +5,12 @@
 
     @author Satoshi Tanda
 
-    @copyright Copyright (c) 2018, Satoshi Tanda. All rights reserved.
+    @copyright Copyright (c) 2018-2021, Satoshi Tanda. All rights reserved.
  */
 #pragma once
 #include <basetsd.h>
 
-static const ULONG k_MaxInsturctionLength = 15;
+static constexpr ULONG k_MaxInsturctionLength = 15;
 
 #define IA32_APIC_BASE  0x0000001b
 #define IA32_MSR_PAT    0x00000277

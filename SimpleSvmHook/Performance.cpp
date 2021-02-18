@@ -5,7 +5,7 @@
 
     @author Satoshi Tanda
 
-    @copyright Copyright (c) 2018-2019, Satoshi Tanda. All rights reserved.
+    @copyright Copyright (c) 2018-2021, Satoshi Tanda. All rights reserved.
  */
 #include "Performance.hpp"
 #include "Logging.hpp"
@@ -16,7 +16,7 @@
 //
 #pragma prefast(disable : __WARNING_ERROR, "This is completely bogus.")
 
-static const ULONG k_PerformancePoolTag = 'freP';
+static constexpr ULONG k_PerformancePoolTag = 'freP';
 
 /*!
     @brief Responsible for collecting and saving data supplied by PerfCounter.

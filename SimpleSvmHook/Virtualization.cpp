@@ -708,9 +708,9 @@ BuildMsrPermissionsMap (
     _Inout_ PVOID MsrPermissionsMap
     )
 {
-    static const UINT32 bitsPerMsr = 2;
-    static const UINT32 secondMsrRangeBase = 0xc0000000;
-    static const UINT32 secondMsrpmOffset = 0x800 * CHAR_BIT;
+    static constexpr UINT32 bitsPerMsr = 2;
+    static constexpr UINT32 secondMsrRangeBase = 0xc0000000;
+    static constexpr UINT32 secondMsrpmOffset = 0x800 * CHAR_BIT;
 
     RTL_BITMAP bitmapHeader;
     ULONG offsetFrom2ndBase, offset;

@@ -5,7 +5,7 @@
 
     @author Satoshi Tanda
 
-    @copyright Copyright (c) 2018, Satoshi Tanda. All rights reserved.
+    @copyright Copyright (c) 2018-2021, Satoshi Tanda. All rights reserved.
  */
 #pragma once
 #include <fltKernel.h>
@@ -129,19 +129,19 @@ typedef struct _HOOK_DATA
 
 
 // Get the highest 25 bits
-static const ULONGLONG k_PxiShift = 39;
+static constexpr ULONGLONG k_PxiShift = 39;
 
 // Get the highest 34 bits
-static const ULONGLONG k_PpiShift = 30;
+static constexpr ULONGLONG k_PpiShift = 30;
 
 // Get the highest 43 bits
-static const ULONGLONG k_PdiShift = 21;
+static constexpr ULONGLONG k_PdiShift = 21;
 
 // Get the highest 52 bits
-static const ULONGLONG k_PtiShift = 12;
+static constexpr ULONGLONG k_PtiShift = 12;
 
 // Use 9 bits; 0b0000_0000_0000_0000_0000_0000_0001_1111_1111
-static const ULONGLONG k_PtxMask = 0x1ff;
+static constexpr ULONGLONG k_PtxMask = 0x1ff;
 
 /*!
     @brief Returns the index of PML4 entry for the specified physical address.
@@ -319,7 +319,7 @@ GetVaFromPfn (
     return GetVaFromPa(GetPaFromPfn(PageFrameNumber));
 }
 
-_When_(HookData == nullptr, __drv_allocatesMem(Mem) _Post_maybenull_)
+_When_(HookData == nullptr, _Post_maybenull_)
 _Post_writable_byte_size_(PAGE_SIZE)
 PVOID
 AllocateNptEntry (
